@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Info PR</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #2c3e50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px 0;
+      position: fixed;
+      height: 100vh;
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    .menu, .bottom-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .menu a, .bottom-links a {
+      width: 80%;
+      text-align: center;
+      padding: 12px;
+      margin: 6px 0;
+      background-color: #34495e;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .menu a:hover {
+      background-color: #1abc9c;
+    }
+
+    .bottom-links .about {
+      background-color: #2980b9;
+    }
+
+    .bottom-links .about:hover {
+      background-color: #2471a3;
+    }
+
+    .bottom-links .logout {
+      background-color: #e74c3c;
+    }
+
+    .bottom-links .logout:hover {
+      background-color: #c0392b;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 40px;
+      flex: 1;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      resize: vertical;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 150px;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #ecf0f1;
+    }
+
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div>
+      <div class="logo">LOGO X TJAT 1</div>
+      <div class="menu">
+        <a href="dashboard.html">Dashboard</a>
+        <a href="infopr.html">Info PR</a>
+        <a href="infoharian.html">Info Harian</a>
+        <a href="absensi.html">Absensi</a>
+        <a href="tugas.html">Tugas</a>
+      </div>
+    </div>
+    <div class="bottom-links">
+      <a href="about.html" class="about">About</a>
+      <a href="login.html" class="logout">Log Out</a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <h1>Info PR</h1>
+
+    <div class="input-container">
+      <input type="text" id="prInput" placeholder="Masukkan judul PR...">
+      <textarea id="descInput" rows="4" placeholder="Masukkan deskripsi PR..."></textarea>
+      <button onclick="addPR()">Tambah PR</button>
+    </div>
+
+    <table id="prTable">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Judul PR</th>
+          <th>Deskripsi</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- PR akan dimuat di sini -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let prList = JSON.parse(localStorage.getItem('prList')) || [];
+
+    function renderTable() {
+      const tableBody = document.querySelector("#prTable tbody");
+      tableBody.innerHTML = "";
+
+      prList.forEach((item, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${item.title}</td>
+          <td>${item.description}</td>
+          <td><button class="delete-btn" onclick="deletePR(${index})">Hapus</button></td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+
+      localStorage.setItem('prList', JSON.stringify(prList));
+    }
+
+    function addPR() {
+      const titleInput = document.getElementById("prInput");
+      const descInput = document.getElementById("descInput");
+      const title = titleInput.value.trim();
+      const description = descInput.value.trim();
+
+      if (title !== "" && description !== "") {
+        prList.push({ title, description });
+        titleInput.value = "";
+        descInput.value = "";
+        renderTable();
+      }
+    }
+
+    function deletePR(index) {
+      prList.splice(index, 1);
+      renderTable();
+    }
+
+    // Load data saat halaman dimuat
+    renderTable();
+  </script>
+
+</body>
+</html>

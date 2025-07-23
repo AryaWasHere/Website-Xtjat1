@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign Up - X TJAT 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+
+    .signup-container {
+      width: 400px;
+      margin: 60px auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background-color: #1e8449;
+    }
+
+    .login-redirect {
+      text-align: center;
+    }
+
+    .login-redirect a {
+      color: #2980b9;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .login-redirect a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-container">
+    <h2>Sign Up - X TJAT 1</h2>
+
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <input type="text" id="absen" placeholder="Nomor Absen" />
+    <input type="date" id="tanggal" placeholder="Tanggal Lahir" />
+    <input type="text" id="kelas" placeholder="Kelas" />
+
+    <button onclick="signup()">Daftar</button>
+
+    <div class="login-redirect">
+      Sudah punya akun? <a href="login.html">Login di sini</a>
+    </div>
+  </div>
+
+  <script>
+    function signup() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const absen = document.getElementById("absen").value.trim();
+      const tanggalLahir = document.getElementById("tanggal").value.trim();
+      const kelas = document.getElementById("kelas").value.trim();
+
+      if (!username || !password) {
+        alert("Username dan Password wajib diisi!");
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+
+      if (users.some(u => u.username === username)) {
+        alert("Username sudah digunakan!");
+        return;
+      }
+
+      users.push({ username, password, absen, tanggalLahir, kelas });
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Berhasil mendaftar! Silakan login.");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>
