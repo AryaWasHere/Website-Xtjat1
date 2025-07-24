@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up - X TJAT1</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h1 {
+      font-size: 26px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .signup-box {
+      background: #0f3460;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+      width: 320px;
+      text-align: center;
+    }
+    input, button {
+      width: 260px;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    input {
+      background: #e0e0e0;
+      color: #000;
+    }
+    button {
+      background: #00adb5;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #03c9c9;
+    }
+    .login-link {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    .login-link a {
+      color: #1abc9c;
+      text-decoration: none;
+    }
+    .popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #1dd1a1;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 99;
+    }
+    .popup.error {
+      background: #ff6b6b;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>DAFTAR AKUN BARU</h1>
+
+  <div class="signup-box">
+    <h2>Sign Up</h2>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <input type="text" id="kelas" placeholder="Kelas (Contoh: X TJAT1)" required />
+    <input type="date" id="tanggalLahir" placeholder="Tanggal Lahir (Opsional)" />
+    <input type="text" id="alamat" placeholder="Alamat (Opsional)" />
+    <button onclick="signup()">Sign Up</button>
+    <div class="login-link">
+      Sudah punya akun? <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <div class="popup" id="popup"></div>
+
+  <script>
+    const url = "https://script.google.com/macros/s/AKfycbxBFUwoOXzc5SBQf2itjiiMiXNgXVLXWsQUH0Cn3vU2qNIBAUhBK6GGLIPZJt8qUO-HUA/exec";
+
+    function showPopup(message, isError = false) {
+      const popup = document.getElementById("popup");
+      popup.textContent = message;
+      popup.className = "popup" + (isError ? " error" : "");
+      popup.style.display = "block";
+      setTimeout(() => popup.style.display = "none", 3000);
+    }
+
+    function signup() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const kelas = document.getElementById("kelas").value.trim();
+      const tanggalLahir = document.getElementById("tanggalLahir").value;
+      const alamat = document.getElementById("alamat").value.trim();
+
+      if (!username || !password || !kelas) {
+        showPopup("Username, Password, dan Kelas wajib diisi!", true);
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("action", "signup");
+      formData.append("username", username);
+      formData.append("password", password);
+      formData.append("kelas", kelas);
+      formData.append("tanggalLahir", tanggalLahir);
+      formData.append("alamat", alamat);
+
+      fetch(url, {
+        method: "POST",
+        body: formData,
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          showPopup("Pendaftaran berhasil!");
+          setTimeout(() => window.location.href = "login.html", 1500);
+        } else {
+          showPopup(data.message || "Username sudah terdaftar", true);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        showPopup("Gagal koneksi ke server!", true);
+      });
+    }
+  </script>
+
+</body>
+</html>
