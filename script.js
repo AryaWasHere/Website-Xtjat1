@@ -1,69 +1,68 @@
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxBFUwoOXzc5SBQf2itjiiMiXNgXVLXWsQUH0Cn3vU2qNIBAUhBK6GGLIPZJt8qUO-HUA/exec";
-
-function showPopup(msg) {
-  const popup = document.getElementById("popup");
-  popup.textContent = msg;
-  popup.classList.add("show");
-  setTimeout(() => popup.classList.remove("show"), 3000);
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #74ebd5, #9face6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-function login() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!username || !password) return showPopup("Isi semua kolom!");
-
-  if (username === "Admin" && password === "Admin") {
-    window.location.href = "dashboard.html";
-    return;
-  }
-
-  fetch(GAS_URL, {
-    method: "POST",
-    body: JSON.stringify({ action: "login", username, password }),
-    headers: { "Content-Type": "application/json" }
-  })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        localStorage.setItem("username", username);
-        window.location.href = "dashboard.html";
-      } else {
-        showPopup("Login gagal.");
-      }
-    })
-    .catch(() => showPopup("Koneksi gagal."));
+.container {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
-function signup() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const tanggalLahir = document.getElementById("tgl").value.trim();
-  const kelas = document.getElementById("kelas").value.trim();
-  const alamat = document.getElementById("alamat").value.trim();
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
 
-  if (!username || !password) return showPopup("Username dan password wajib diisi!");
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="email"],
+input[type="number"] {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
 
-  fetch(GAS_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      action: "signup",
-      username,
-      password,
-      tanggalLahir,
-      kelas,
-      alamat
-    }),
-    headers: { "Content-Type": "application/json" }
-  })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        showPopup("Berhasil daftar!");
-        setTimeout(() => (window.location.href = "index.html"), 2000);
-      } else {
-        showPopup("Gagal daftar.");
-      }
-    })
-    .catch(() => showPopup("Koneksi gagal."));
+input:focus {
+  border-color: #74ebd5;
+  outline: none;
+  box-shadow: 0 0 8px rgba(116, 235, 213, 0.6);
+}
+
+button {
+  background-color: #74ebd5;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  margin-top: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #5ad7c0;
+}
+
+p {
+  margin-top: 15px;
+  font-size: 14px;
 }
